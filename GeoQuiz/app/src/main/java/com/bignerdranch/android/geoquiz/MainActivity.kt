@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+
     private val quizViewModel: QuizViewModel by viewModels()
 
     private val cheatLauncher = registerForActivityResult(
@@ -31,24 +32,36 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
-
         Log.d(TAG, "Got a QuizViewModel: $quizViewModel")
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.questionTextView.setOnClickListener {
+            quizViewModel.moveToNext()
+            updateQuestion()
+        }
+
         binding.trueButton.setOnClickListener { view: View ->
             checkAnswer(true)
+            binding.trueButton.isEnabled = false
+            binding.falseButton.isEnabled = false
         }
 
         binding.falseButton.setOnClickListener { view: View ->
             checkAnswer(false)
+            binding.falseButton.isEnabled = false
+            binding.trueButton.isEnabled = false
         }
 
         binding.nextButton.setOnClickListener {
             quizViewModel.moveToNext()
             updateQuestion()
+        }
 
+        binding.prevButton.setOnClickListener {
+            quizViewModel.moveToPrev()
+            updateQuestion()
         }
 
         binding.cheatButton.setOnClickListener {
@@ -88,6 +101,9 @@ class MainActivity : AppCompatActivity() {
     private fun updateQuestion() {
         val questionTextResId = quizViewModel.currentQuestionText
         binding.questionTextView.setText(questionTextResId)
+        binding.trueButton.isEnabled = true
+        binding.falseButton.isEnabled = true
+
     }
 
     private fun checkAnswer(userAnswer: Boolean) {
@@ -101,5 +117,7 @@ class MainActivity : AppCompatActivity() {
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
             .show()
+
+
     }
 }
