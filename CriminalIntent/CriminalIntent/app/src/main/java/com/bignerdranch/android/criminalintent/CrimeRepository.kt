@@ -3,6 +3,8 @@ package com.bignerdranch.android.criminalintent
 import android.content.Context
 import androidx.room.Room
 import com.bignerdranch.android.criminalintent.database.CrimeDatabase
+import com.bignerdranch.android.criminalintent.database.migration_1_2
+import com.bignerdranch.android.criminalintent.database.migration_2_3
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -18,7 +20,7 @@ class CrimeRepository private constructor(context: Context, private val coroutin
             CrimeDatabase::class.java,
             DATABASE_NAME
         )
-        .createFromAsset(DATABASE_NAME)
+        .addMigrations(migration_1_2, migration_2_3)
         .build()
 
     fun getCrimes(): Flow<List<Crime>>
@@ -30,6 +32,11 @@ class CrimeRepository private constructor(context: Context, private val coroutin
             database.crimeDao().updateCrime(crime)
         }
     }
+
+    suspend fun addCrime(crime: Crime){
+        database.crimeDao().addCrime(crime)
+    }
+
     companion object {
         private var INSTANCE: CrimeRepository? = null
 
