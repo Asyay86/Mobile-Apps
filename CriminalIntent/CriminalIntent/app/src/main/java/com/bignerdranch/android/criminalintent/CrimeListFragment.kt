@@ -19,6 +19,7 @@ import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBind
 import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.UUID
+import android.text.format.DateFormat
 
 private const val TAG = "CrimeListFragment"
 

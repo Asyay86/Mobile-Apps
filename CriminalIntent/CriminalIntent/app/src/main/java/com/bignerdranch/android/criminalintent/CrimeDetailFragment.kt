@@ -29,6 +29,7 @@ import androidx.core.content.FileProvider
 import androidx.core.view.doOnLayout
 import java.io.File
 
+
 private const val TAG = "CrimeDetailFragment"
 private const val DATE_FORMAT = "EEE, MMM, dd"
 class CrimeDetailFragment : Fragment() {
@@ -145,7 +146,7 @@ class CrimeDetailFragment : Fragment() {
             if(crimeTitle.text.toString() != crime.title){
                 crimeTitle.setText(crime.title)
             }
-            crimeDate.text = crime.date.toString()
+            crimeDate.text = DateFormat.format("EEE dd MMM yyyy, hh:mm", crime.date)
             crimeDate.setOnClickListener {
                 findNavController().navigate(
                     CrimeDetailFragmentDirections.selectDate(crime.date)
